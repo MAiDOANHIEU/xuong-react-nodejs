@@ -1,36 +1,32 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-
 const productSchema = new mongoose.Schema(
     {
         name: {
             type: String,
             required: true,
             lowercase: true,
+            index: true,
         },
         slug: {
             type: String,
             unique: true,
+            index: true,
         },
-        category: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Category",
-            required: true,
-        },
+        category: [
+            {
+                type: String,
+                required: true,
+            },
+        ],
         price: {
             type: Number,
             required: true,
             default: 0,
         },
-        image: {
-            type: String,
-        },
-        gallery: {
-            type: Array,
-        },
-        description: {
-            type: String,
-        },
+        image: String,
+        gallery: [String],
+        description: String,
         discount: {
             type: Number,
             default: 0,
@@ -39,13 +35,8 @@ const productSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
-        featured: {
-            type: Boolean,
-            default: false,
-        },
-        tags: {
-            type: Array,
-        },
+        featured: Boolean,
+        tags: [String],
         attributes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -57,4 +48,4 @@ const productSchema = new mongoose.Schema(
 );
 
 productSchema.plugin(mongoosePaginate);
-export default mongoose.model("Product", productSchema);
+export default mongoose.models.Product || mongoose.model("Product", productSchema);
